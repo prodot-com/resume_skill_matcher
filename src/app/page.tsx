@@ -17,6 +17,13 @@ export default function ResumeMatcherPage() {
     const selected = e.target.files?.[0];
     if (!selected) return;
 
+    if (selected.size > 4 * 1024 * 1024) {
+      toast.error("File too large", {
+        description: "Max size is 4MB (Vercel limit)"
+      });
+      return;
+    }
+
     if (selected.type !== "application/pdf") {
       toast.error("Invalid file type", {
         description: "Only PDF files are supported."
