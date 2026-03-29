@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Upload, FileText, CheckCircle, AlertCircle, Loader2, X, Trophy, Sparkles, Angry } from 'lucide-react';
+import { Upload, FileText, CheckCircle, AlertCircle, Loader2, X, Trophy, Sparkles, Angry, Heart, Globe, Smile } from 'lucide-react';
 import { toast } from "sonner";
 
 const DEFAULT_REQUIRED = ['React', 'TypeScript', 'Node.js', 'Python', 'SQL'];
@@ -109,12 +109,16 @@ export default function ResumeMatcherPage() {
           </div>
           <div className="flex items-center gap-2 md:gap-4">
             <a
-              href="https://github.com"
+              href="https://github.com/prodot-com"
               target="_blank"
               className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-600 dark:text-slate-400"
               title="GitHub Repository"
             >
-              <Angry size={20} />
+              <img
+                src="/github.svg"
+                alt="GitHub"
+                className="w-5 h-5"
+              />
             </a>
           </div>
         </div>
@@ -266,6 +270,44 @@ export default function ResumeMatcherPage() {
           </div>
         </div>
       </main>
+
+      <footer className="mt-auto py-12 px-4 border-t border-slate-200 bg-white">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="flex flex-col items-center md:items-start gap-2">
+            <div className="flex items-center gap-2">
+              <Sparkles className="text-blue-600" size={20} />
+              <span className="font-black tracking-tight text-slate-900">SkillMatcher AI</span>
+            </div>
+            <p className="text-sm text-slate-500 font-medium">Empowering your career with AI-driven insights.</p>
+          </div>
+
+          <div className="flex flex-col items-center gap-4">
+            <div className="flex items-center gap-6">
+              <a href="https://github.com/prodot-com" className="text-slate-400 hover:text-blue-600 transition-colors p-1 rounded-full hover:bg-black/15">
+                <img
+                  src="/github.svg"
+                  alt="GitHub"
+                  className="w-5 h-5"
+                />
+              </a>
+              <a href="https://www.linkedin.com/in/ghoshprobal/" className="text-slate-400 hover:text-blue-600 transition-colors p-1 rounded-full hover:bg-black/15">
+                <img
+                  src="/linkedin.svg"
+                  alt="GitHub"
+                  className="w-5 h-5"
+                />
+              </a>
+            </div>
+            <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
+              Made with <Heart size={12} className="text-rose-500 fill-rose-500" /> by <span className=''>PROBAL</span>
+            </p>
+          </div>
+
+          <div className="text-center md:text-right">
+            <p className="text-sm text-slate-500 font-medium">© {new Date().getFullYear()} SkillMatcher. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
