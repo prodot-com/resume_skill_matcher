@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Upload, FileText, CheckCircle, AlertCircle, Loader2, X, Trophy } from 'lucide-react';
+import { Upload, FileText, CheckCircle, AlertCircle, Loader2, X, Trophy, Sparkles, Angry, Sun, Moon } from 'lucide-react';
 
 const DEFAULT_REQUIRED = ['React', 'TypeScript', 'Node.js', 'Python', 'SQL'];
 
@@ -12,6 +12,7 @@ export default function ResumeMatcherPage() {
   const [error, setError] = useState<string | null>(null);
   const [requiredSkills, setRequiredSkills] = useState<string[]>(DEFAULT_REQUIRED);
   const [newSkill, setNewSkill] = useState("");
+  const [isDark, setIsDark] = useState(false);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
@@ -37,19 +38,15 @@ export default function ResumeMatcherPage() {
 
       const data = await response.json();
 
+      if (!response.ok) throw new Error(data.error || "Failed to parse resume");
+      
       if (!data.skills || data.skills.length === 0) {
         setError("No skills found in resume.");
         setExtractedSkills([]);
         return;
       }
 
-      if (!data.skills) {
-        throw new Error("Invalid AI response");
-      }
-
-      if (!response.ok) throw new Error(data.error || "Failed to parse resume");
-
-      setExtractedSkills(data.skills || []);
+      setExtractedSkills(data.skills);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -72,131 +69,174 @@ export default function ResumeMatcherPage() {
   const { matched, score } = calculateMatch();
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 md:p-12 font-sans text-gray-900">
-      <div className="max-w-5xl mx-auto space-y-10">
-        
-        {/* Header Section */}
-        <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <h1 className="text-4xl font-black tracking-tight text-blue-600">SkillMatcher AI</h1>
-            <p className="text-gray-500 mt-2">Next-gen resume analysis powered by Gemini 2.5</p>
+    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans">
+      
+      <nav className="sticky top-4 z-50 mx-auto w-[82%] rounded-4xl bg-white/50 backdrop-blur-md border border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="bg-blue-600 p-2 rounded-xl">
+              <Sparkles className="text-white" size={24} />
+            </div>
+            <h1 className="text-2xl font-black tracking-tighter text-slate-900">
+              SkillMatcher <span className="text-blue-600">AI</span>
+            </h1>
           </div>
-          <div className="bg-white px-4 py-2 rounded-full border border-gray-200 shadow-sm text-sm font-medium">
-            Project Due: 31-03-2026
+          <div className="flex items-center gap-2 md:gap-4">
+            <a 
+              href="https://github.com" 
+              target="_blank" 
+              className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-600 dark:text-slate-400"
+              title="GitHub Repository"
+            >
+              <Angry size={20} />
+            </a>
+            <button 
+              onClick={() => setIsDark(!isDark)}
+              className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-600 dark:text-slate-400"
+              title="Toggle Theme"
+            >
+              {isDark ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
           </div>
-        </header>
+        </div>
+      </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <main className="max-w-7xl mx-auto px-4 py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* Sidebar: Config */}
+          
           <div className="lg:col-span-4 space-y-6">
-            <div className="bg-white p-6 rounded-3xl shadow-xl border border-gray-100">
-              <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-                <Upload size={20} className="text-blue-500" />
+            
+            <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-200">
+              <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-slate-800">
+                <Upload size={18} className="text-blue-500" />
                 Upload Resume
               </h2>
               <label className="group relative block cursor-pointer">
                 <input type="file" className="hidden" onChange={handleFileChange} accept=".pdf,.txt" />
-                <div className="border-2 border-dashed border-gray-200 group-hover:border-blue-400 group-hover:bg-blue-50 rounded-2xl p-10 text-center transition-all">
-                  <FileText className="mx-auto mb-3 text-gray-300 group-hover:text-blue-500" size={40} />
-                  <p className="text-sm font-semibold text-gray-600">
-                    {file ? file.name : "Select Resume"}
+                <div className="border-2 border-dashed border-slate-200 group-hover:border-blue-400 group-hover:bg-blue-50/50 rounded-2xl p-8 text-center transition-all duration-300">
+                  <div className="bg-slate-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-100 transition-colors">
+                    <FileText className="text-slate-400 group-hover:text-blue-600" size={32} />
+                  </div>
+                  <p className="text-sm font-bold text-slate-700">
+                    {file ? file.name : "Drop resume here"}
                   </p>
                   {file && (
-                    <p className="text-xs text-gray-400 mt-1">
+                    <p className="text-xs text-blue-500 font-semibold mt-1">
                       {(file.size / 1024).toFixed(2)} KB
                     </p>
                   )}
-                  <p className="text-xs text-gray-400 mt-1">PDF or Text format</p>
+                  <p className="text-xs text-slate-400 mt-2">Supports PDF & Plain Text</p>
                 </div>
               </label>
               {error && (
-                <div className="mt-4 p-3 bg-red-50 text-red-600 rounded-xl text-xs flex gap-2">
-                  <AlertCircle size={14} className="shrink-0" />
+                <div className="mt-4 p-4 bg-red-50 border border-red-100 text-red-600 rounded-2xl text-xs font-medium flex gap-3 animate-shake">
+                  <AlertCircle size={16} className="shrink-0" />
                   {error}
                 </div>
               )}
             </div>
 
-            <div className="bg-white p-6 rounded-3xl shadow-xl border border-gray-100">
-              <h2 className="text-lg font-bold mb-4">Required Skills</h2>
-              <div className="flex gap-2 mb-4">
+            {/* Target Skills Section */}
+            <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-200">
+              <h2 className="text-lg font-bold mb-4 text-slate-800">Target Requirements</h2>
+              <div className="flex gap-2 mb-6">
                 <input 
                   type="text" 
                   value={newSkill}
                   onChange={(e) => setNewSkill(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && (setRequiredSkills([...requiredSkills, newSkill]), setNewSkill(""))}
-                  placeholder="e.g. Docker"
-                  className="w-full px-4 py-2 rounded-xl bg-gray-100 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                  placeholder="Add required skill..."
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 text-sm border border-slate-100 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all"
                 />
               </div>
               <div className="flex flex-wrap gap-2">
                 {requiredSkills.map(s => (
-                  <span key={s} className="px-3 py-1.5 bg-gray-900 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-2">
+                  <span key={s} className="pl-3 pr-2 py-1.5 bg-slate-900 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-2 group">
                     {s}
-                    <X size={12} className="cursor-pointer" onClick={() => setRequiredSkills(requiredSkills.filter(i => i !== s))} />
+                    <button onClick={() => setRequiredSkills(requiredSkills.filter(i => i !== s))} className="hover:text-red-400 transition-colors">
+                      <X size={14} />
+                    </button>
                   </span>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Main: Analysis */}
+          {/* 3. Right Column: Analysis Output */}
           <div className="lg:col-span-8">
             {loading ? (
-              <div className="h-full min-h-[400px] flex flex-col items-center justify-center bg-white rounded-3xl shadow-xl border border-gray-100 space-y-4">
-                <Loader2 size={48} className="animate-spin text-blue-500" />
-                <p className="text-gray-500 font-medium">Extracting professional skills...</p>
+              <div className="h-[500px] flex flex-col items-center justify-center bg-white rounded-[2rem] border border-slate-200 shadow-sm space-y-6">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-blue-500 blur-2xl opacity-20 animate-pulse"></div>
+                  <Loader2 size={64} className="animate-spin text-blue-600 relative z-10" />
+                </div>
+                <div className="text-center">
+                  <p className="text-xl font-bold text-slate-800">Analyzing Experience</p>
+                  <p className="text-slate-400 text-sm">Gemini 1.5 is identifying technical skills...</p>
+                </div>
               </div>
             ) : extractedSkills.length > 0 ? (
-              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-700">
                 
-                {/* Score Card */}
-                <div className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 overflow-hidden relative">
-                  <div className="flex justify-between items-start relative z-10">
-                    <div>
-                      <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest">Compatibility</h3>
-                      <div className="text-6xl font-black mt-2">{score}%</div>
+                {/* Score Section */}
+                <div className="bg-white p-10 rounded-[2.5rem] shadow-sm border border-slate-200 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
+                    <Trophy size={200} />
+                  </div>
+                  
+                  <div className="flex flex-col md:flex-row justify-between items-center gap-8 relative z-10">
+                    <div className="text-center md:text-left">
+                      <h3 className="text-xs font-black text-blue-600 uppercase tracking-[0.2em] mb-2">Job Compatibility</h3>
+                      <div className="text-8xl font-black tracking-tighter text-slate-900 leading-none">
+                        {score}<span className="text-blue-600">%</span>
+                      </div>
+                      <p className="mt-6 text-slate-500 font-medium">
+                        Based on target requirements, we found <span className="text-slate-900 font-bold">{matched.length} of {requiredSkills.length} skills</span>.
+                      </p>
                     </div>
-                    <Trophy size={64} className="text-yellow-400 opacity-20" />
+
+                    <div className="w-full md:w-64 space-y-4">
+                      <div className="h-4 w-full bg-slate-100 rounded-full overflow-hidden p-1 border border-slate-200/50">
+                        <div 
+                          className={`h-full rounded-full transition-all duration-1000 ease-out ${score > 70 ? 'bg-emerald-500' : score > 40 ? 'bg-blue-500' : 'bg-rose-500'}`} 
+                          style={{ width: `${score}%` }} 
+                        />
+                      </div>
+                      <div className="flex justify-between text-[10px] font-black uppercase text-slate-400 tracking-widest">
+                        <span>Low Match</span>
+                        <span>Perfect fit</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="mt-8 h-4 w-full bg-gray-100 rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full transition-all duration-1000 ${score > 70 ? 'bg-green-500' : score > 40 ? 'bg-blue-500' : 'bg-red-500'}`} 
-                      style={{ width: `${score}%` }} 
-                    />
-                  </div>
-                  <p className="mt-4 text-sm text-gray-500 font-medium italic">
-                    {matched.length} of {requiredSkills.length} skills matched — {score}%
-                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Extracted Pill Cloud */}
-                  <div className="bg-white p-6 rounded-3xl shadow-xl border border-gray-100">
-                    <h4 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Detected in Resume</h4>
+                  {/* Skill Pill Cloud */}
+                  <div className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-200">
+                    <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Extracted Expertise</h4>
                     <div className="flex flex-wrap gap-2">
                       {extractedSkills.map(s => (
-                        <span key={s} className="px-3 py-1 bg-blue-50 text-blue-700 rounded-lg text-xs font-semibold">
+                        <span key={s} className="px-4 py-2 bg-blue-50/50 text-blue-700 rounded-xl text-xs font-bold border border-blue-100/50 hover:bg-blue-100 transition-colors">
                           {s}
                         </span>
                       ))}
                     </div>
                   </div>
 
-                  {/* Matching List */}
-                  <div className="bg-white p-6 rounded-3xl shadow-xl border border-gray-100">
-                    <h4 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Skill Comparison</h4>
+                  {/* Matching Checklist */}
+                  <div className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-200">
+                    <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Requirement Match</h4>
                     <div className="space-y-3">
                       {requiredSkills.map(req => {
                         const isMatch = matched.includes(req);
                         return (
-                          <div key={req} className="flex items-center justify-between p-2 rounded-xl bg-gray-50">
-                            <span className={`text-sm font-bold ${isMatch ? 'text-gray-900' : 'text-gray-400'}`}>{req}</span>
+                          <div key={req} className={`flex items-center justify-between p-4 rounded-2xl transition-all ${isMatch ? 'bg-emerald-50 border border-emerald-100' : 'bg-slate-50 border border-slate-100'}`}>
+                            <span className={`text-sm font-bold ${isMatch ? 'text-emerald-900' : 'text-slate-400'}`}>{req}</span>
                             {isMatch ? (
-                              <CheckCircle size={16} className="text-green-500" />
+                              <div className="bg-emerald-500 p-1 rounded-full"><CheckCircle size={14} className="text-white" /></div>
                             ) : (
-                              <X size={16} className="text-gray-300" />
+                              <X size={16} className="text-slate-300" />
                             )}
                           </div>
                         );
@@ -206,14 +246,17 @@ export default function ResumeMatcherPage() {
                 </div>
               </div>
             ) : (
-              <div className="h-full min-h-[400px] flex flex-col items-center justify-center bg-white rounded-3xl border-2 border-dashed border-gray-200">
-                <FileText size={64} className="text-gray-100 mb-4" />
-                <p className="text-gray-400 font-medium">No resume analyzed yet.</p>
+              <div className="h-[500px] flex flex-col items-center justify-center bg-white rounded-[2rem] border-2 border-dashed border-slate-200 group hover:border-blue-300 transition-colors">
+                <div className="bg-slate-50 p-6 rounded-3xl mb-4 group-hover:scale-110 transition-transform duration-500">
+                    <FileText size={64} className="text-slate-200 group-hover:text-blue-200" />
+                </div>
+                <p className="text-slate-400 font-bold tracking-tight">Ready for Resume Analysis</p>
+                <p className="text-slate-300 text-sm mt-1">Upload a file to see your compatibility score</p>
               </div>
             )}
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
