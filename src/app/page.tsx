@@ -312,7 +312,10 @@ export default function ResumeMatcherPage() {
               </a>
             </div>
             <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
-              Made with <Heart size={12} className="text-rose-500 fill-rose-500" /> by <span className=''>PROBAL</span>
+              Made with <Heart size={12} className="text-rose-500 fill-rose-500" /> by 
+              <a href="https://probalghosh.dev" target='_blank'>
+                <span className='underline cursor-pointer'>PROBAL</span>
+              </a>
             </p>
           </div>
 
