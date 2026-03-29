@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Upload, FileText, CheckCircle, AlertCircle, Loader2, X, Trophy, Sparkles, Angry, Heart, Globe, Smile } from 'lucide-react';
+import { Upload, FileText, CheckCircle, Loader2, X, Trophy, Sparkles, Angry, Heart, Globe, Smile } from 'lucide-react';
 import { toast } from "sonner";
 
 const DEFAULT_REQUIRED = ['React', 'TypeScript', 'Node.js', 'Python', 'SQL'];
