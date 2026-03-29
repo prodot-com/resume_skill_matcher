@@ -103,7 +103,7 @@ export default function ResumeMatcherPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#f8fafc] text-slate-900 font-mono">
+    <div className="relative min-h-screen bg-white text-slate-900 font-mono">
 
       <div className="absolute  top-60 md:-top-25 left-1/2 -translate-x-1/2 w-full h-200 md:w-225 md:h-175 
         bg-indigo-300 blur-[120px] rounded-full z-0" 
