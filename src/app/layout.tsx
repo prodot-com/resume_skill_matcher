@@ -14,6 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  icons:{
+    icon: "/icon.svg"
+  },
   title: "Skill Matcher AI - Analyze your resume with AI and get instant job compatibility score.",
   description: "Analyze your resume with AI and get instant job compatibility score.",
 };
