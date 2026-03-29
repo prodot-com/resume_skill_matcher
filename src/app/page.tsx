@@ -103,8 +103,13 @@ export default function ResumeMatcherPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans">
-      <nav className="sticky top-4 z-50 mx-auto w-[82%] rounded-4xl bg-white/50 backdrop-blur-md border border-slate-200">
+    <div className="relative min-h-screen bg-[#f8fafc] text-slate-900 font-mono">
+
+      <div className="absolute  top-60 md:-top-25 left-1/2 -translate-x-1/2 w-full h-[800px] md:w-[900px] md:h-[700px] 
+        bg-indigo-300 blur-[120px] rounded-full z-0" 
+        />
+
+      <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[91%] md:w-[82%] rounded-[10px] bg-white/60 backdrop-blur-md border border-slate-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="bg-blue-600 p-2 rounded-xl">
@@ -131,12 +136,13 @@ export default function ResumeMatcherPage() {
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-4 py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <main className="max-w-7xl mx-auto px-4 py-10 mt-21 z-20">
 
-          <div className="lg:col-span-4 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start z-20">
 
-            <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-200">
+          <div className="lg:col-span-4 space-y-6 z-20">
+
+            <div className="bg-white p-6 rounded-[10px] shadow-sm border border-slate-200">
               <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-slate-800">
                 <Upload size={18} className="text-blue-500" />
                 Upload Resume
@@ -160,7 +166,7 @@ export default function ResumeMatcherPage() {
               </label>
             </div>
 
-            <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-200">
+            <div className="bg-white p-6 rounded-[10px] shadow-sm border border-slate-200">
               <h2 className="text-lg font-bold mb-4 text-slate-800">Target Requirements</h2>
               <div className="flex gap-2 mb-6">
                 <input
@@ -185,22 +191,22 @@ export default function ResumeMatcherPage() {
             </div>
           </div>
 
-          <div className="lg:col-span-8">
+          <div className="lg:col-span-8 z-20">
             {loading ? (
-              <div className="h-[500px] flex flex-col items-center justify-center bg-white rounded-[2rem] border border-slate-200 shadow-sm space-y-6">
+              <div className="h-[500px] flex flex-col items-center justify-center bg-white rounded-[10px] border border-slate-200 shadow-sm space-y-6">
                 <div className="relative">
                   <div className="absolute inset-0 bg-blue-500 blur-2xl opacity-20 animate-pulse"></div>
                   <Loader2 size={64} className="animate-spin text-blue-600 relative z-10" />
                 </div>
                 <div className="text-center">
-                  <p className="text-xl font-bold text-slate-800">Analyzing Experience</p>
-                  <p className="text-slate-400 text-sm">Gemini 1.5 is identifying technical skills...</p>
+                  <p className="text-xl font-bold text-slate-800">Analyzing Skills</p>
+                  <p className="text-slate-400 text-sm">This may take some minutes....</p>
                 </div>
               </div>
             ) : extractedSkills.length > 0 ? (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-700">
 
-                <div className="bg-white p-10 rounded-[2.5rem] shadow-sm border border-slate-200 relative overflow-hidden">
+                <div className="bg-white p-10 rounded-[10px] shadow-sm border border-slate-200 relative overflow-hidden">
                   <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
                     <Trophy size={200} />
                   </div>
@@ -234,8 +240,8 @@ export default function ResumeMatcherPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                  <div className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-200">
-                    <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Extracted Expertise</h4>
+                  <div className="bg-white p-8 rounded-[10px] shadow-sm border border-slate-200">
+                    <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Extracted Skills</h4>
                     <div className="flex flex-wrap gap-2">
                       {extractedSkills.map(s => (
                         <span key={s} className="px-4 py-2 bg-blue-50/50 text-blue-700 rounded-xl text-xs font-bold border border-blue-100/50 hover:bg-blue-100 transition-colors">
@@ -245,7 +251,7 @@ export default function ResumeMatcherPage() {
                     </div>
                   </div>
 
-                  <div className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-200">
+                  <div className="bg-white p-8 rounded-[10px] shadow-sm border border-slate-200">
                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Requirement Match</h4>
                     <div className="space-y-3">
                       {requiredSkills.map(req => {
@@ -266,7 +272,7 @@ export default function ResumeMatcherPage() {
                 </div>
               </div>
             ) : (
-              <div className="h-[500px] flex flex-col items-center justify-center bg-white rounded-[2rem] border-2 border-dashed border-slate-200 group hover:border-blue-300 transition-colors">
+              <div className="h-[500px] flex flex-col items-center justify-center bg-white rounded-[10px] border-2 border-dashed border-slate-200 group hover:border-blue-300 transition-colors">
                 <div className="bg-slate-50 p-6 rounded-3xl mb-4 group-hover:scale-110 transition-transform duration-500">
                   <FileText size={64} className="text-slate-200 group-hover:text-blue-200" />
                 </div>
@@ -278,7 +284,7 @@ export default function ResumeMatcherPage() {
         </div>
       </main>
 
-      <footer className="mt-auto py-12 px-4 border-t border-slate-200 bg-white">
+      <footer className="mt-auto py-12 px-4 border-t border-slate-200 bg-white z-50">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex flex-col items-center md:items-start gap-2">
             <div className="flex items-center gap-2">
