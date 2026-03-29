@@ -37,6 +37,16 @@ export default function ResumeMatcherPage() {
 
       const data = await response.json();
 
+      if (!data.skills || data.skills.length === 0) {
+        setError("No skills found in resume.");
+        setExtractedSkills([]);
+        return;
+      }
+
+      if (!data.skills) {
+        throw new Error("Invalid AI response");
+      }
+
       if (!response.ok) throw new Error(data.error || "Failed to parse resume");
 
       setExtractedSkills(data.skills || []);
@@ -92,6 +102,11 @@ export default function ResumeMatcherPage() {
                   <p className="text-sm font-semibold text-gray-600">
                     {file ? file.name : "Select Resume"}
                   </p>
+                  {file && (
+                    <p className="text-xs text-gray-400 mt-1">
+                      {(file.size / 1024).toFixed(2)} KB
+                    </p>
+                  )}
                   <p className="text-xs text-gray-400 mt-1">PDF or Text format</p>
                 </div>
               </label>
@@ -152,7 +167,7 @@ export default function ResumeMatcherPage() {
                     />
                   </div>
                   <p className="mt-4 text-sm text-gray-500 font-medium italic">
-                    Matched {matched.length} out of {requiredSkills.length} key requirements.
+                    {matched.length} of {requiredSkills.length} skills matched — {score}%
                   </p>
                 </div>
 
