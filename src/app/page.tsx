@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Upload, FileText, CheckCircle, AlertCircle, Loader2, X, Trophy, Sparkles, Angry} from 'lucide-react';
-import {toast} from "sonner";
+import { Upload, FileText, CheckCircle, AlertCircle, Loader2, X, Trophy, Sparkles, Angry } from 'lucide-react';
+import { toast } from "sonner";
 
 const DEFAULT_REQUIRED = ['React', 'TypeScript', 'Node.js', 'Python', 'SQL'];
 
@@ -10,7 +10,6 @@ export default function ResumeMatcherPage() {
   const [file, setFile] = useState<File | null>(null);
   const [extractedSkills, setExtractedSkills] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [requiredSkills, setRequiredSkills] = useState<string[]>(DEFAULT_REQUIRED);
   const [newSkill, setNewSkill] = useState("");
 
@@ -19,13 +18,16 @@ export default function ResumeMatcherPage() {
     if (!selected) return;
 
     if (selected.type !== "application/pdf") {
-      setError("Only PDF are supported.");
+      toast.error("Invalid file type", {
+        description: "Only PDF files are supported."
+      });
       return;
     }
 
     setFile(selected);
-    setError(null);
     setLoading(true);
+
+    const toastId = toast.loading("Analyzing resume...");
 
     try {
       const formData = new FormData();
@@ -37,19 +39,30 @@ export default function ResumeMatcherPage() {
       });
 
       const data = await response.json();
-      toast.error("Succesfull")
 
-      if (!response.ok) throw new Error(data.error || "Failed to parse resume");
-      
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to parse resume");
+      }
+
       if (!data.skills || data.skills.length === 0) {
-        setError("No skills found in resume.");
+        toast.warning("No skills found", {
+          id: toastId,
+          description: "No specific skills detected"
+        });
         setExtractedSkills([]);
         return;
       }
 
       setExtractedSkills(data.skills);
+      toast.success("Resume Analyzed", {
+        id: toastId,
+        description: `Extracted ${data.skills.length} skills`
+      });
     } catch (err: any) {
-      setError(err.message);
+      toast.error("Extraction Failed", {
+        id: toastId,
+        description: err.message || "Something went wrong"
+      });
     } finally {
       setLoading(false);
     }
@@ -69,9 +82,21 @@ export default function ResumeMatcherPage() {
 
   const { matched, score } = calculateMatch();
 
+  const handleAddSkill = () => {
+    if (!newSkill.trim()){
+      toast.error("Skill cannot be empty");
+      return;
+    }
+    if (requiredSkills.includes(newSkill.trim())) {
+      toast.error("Duplicate Skill", { description: "This skill is already in your list." });
+      return;
+    }
+    setRequiredSkills([...requiredSkills, newSkill.trim()]);
+    setNewSkill("");
+  };
+
   return (
     <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans">
-      
       <nav className="sticky top-4 z-50 mx-auto w-[82%] rounded-4xl bg-white/50 backdrop-blur-md border border-slate-200">
         <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -83,9 +108,9 @@ export default function ResumeMatcherPage() {
             </h1>
           </div>
           <div className="flex items-center gap-2 md:gap-4">
-            <a 
-              href="https://github.com" 
-              target="_blank" 
+            <a
+              href="https://github.com"
+              target="_blank"
               className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-600 dark:text-slate-400"
               title="GitHub Repository"
             >
@@ -97,10 +122,9 @@ export default function ResumeMatcherPage() {
 
       <main className="max-w-7xl mx-auto px-4 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          
+
           <div className="lg:col-span-4 space-y-6">
-            
+
             <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-200">
               <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-slate-800">
                 <Upload size={18} className="text-blue-500" />
@@ -123,22 +147,16 @@ export default function ResumeMatcherPage() {
                   <p className="text-xs text-slate-400 mt-2">Supports PDF</p>
                 </div>
               </label>
-              {error && (
-                <div className="mt-4 p-4 bg-red-50 border border-red-100 text-red-600 rounded-2xl text-xs font-medium flex gap-3 animate-shake">
-                  <AlertCircle size={16} className="shrink-0" />
-                  {error}
-                </div>
-              )}
             </div>
 
             <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-200">
               <h2 className="text-lg font-bold mb-4 text-slate-800">Target Requirements</h2>
               <div className="flex gap-2 mb-6">
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={newSkill}
                   onChange={(e) => setNewSkill(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && (setRequiredSkills([...requiredSkills, newSkill]), setNewSkill(""))}
+                  onKeyDown={(e) => e.key === 'Enter' && handleAddSkill()}
                   placeholder="Add required skill..."
                   className="w-full px-4 py-3 rounded-xl bg-slate-50 text-sm border border-slate-100 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all"
                 />
@@ -170,12 +188,12 @@ export default function ResumeMatcherPage() {
               </div>
             ) : extractedSkills.length > 0 ? (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-700">
-                
+
                 <div className="bg-white p-10 rounded-[2.5rem] shadow-sm border border-slate-200 relative overflow-hidden">
                   <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
                     <Trophy size={200} />
                   </div>
-                  
+
                   <div className="flex flex-col md:flex-row justify-between items-center gap-8 relative z-10">
                     <div className="text-center md:text-left">
                       <h3 className="text-xs font-black text-blue-600 uppercase tracking-[0.2em] mb-2">Job Compatibility</h3>
@@ -183,15 +201,16 @@ export default function ResumeMatcherPage() {
                         {score}<span className="text-blue-600">%</span>
                       </div>
                       <p className="mt-6 text-slate-500 font-medium">
-                        Based on target requirements, we found <span className="text-slate-900 font-bold">{matched.length} of {requiredSkills.length} skills</span>.
+                        {matched.length} of {requiredSkills.length} skills matched —{" "}
+                        <span className="text-slate-900 font-bold">{score}%</span>
                       </p>
                     </div>
 
                     <div className="w-full md:w-64 space-y-4">
                       <div className="h-4 w-full bg-slate-100 rounded-full overflow-hidden p-1 border border-slate-200/50">
-                        <div 
-                          className={`h-full rounded-full transition-all duration-1000 ease-out ${score > 70 ? 'bg-emerald-500' : score > 40 ? 'bg-blue-500' : 'bg-rose-500'}`} 
-                          style={{ width: `${score}%` }} 
+                        <div
+                          className={`h-full rounded-full transition-all duration-1000 ease-out ${score > 70 ? 'bg-emerald-500' : score > 40 ? 'bg-blue-500' : 'bg-rose-500'}`}
+                          style={{ width: `${score}%` }}
                         />
                       </div>
                       <div className="flex justify-between text-[10px] font-black uppercase text-slate-400 tracking-widest">
@@ -203,7 +222,7 @@ export default function ResumeMatcherPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  
+
                   <div className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-200">
                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Extracted Expertise</h4>
                     <div className="flex flex-wrap gap-2">
@@ -238,7 +257,7 @@ export default function ResumeMatcherPage() {
             ) : (
               <div className="h-[500px] flex flex-col items-center justify-center bg-white rounded-[2rem] border-2 border-dashed border-slate-200 group hover:border-blue-300 transition-colors">
                 <div className="bg-slate-50 p-6 rounded-3xl mb-4 group-hover:scale-110 transition-transform duration-500">
-                    <FileText size={64} className="text-slate-200 group-hover:text-blue-200" />
+                  <FileText size={64} className="text-slate-200 group-hover:text-blue-200" />
                 </div>
                 <p className="text-slate-400 font-bold tracking-tight">Ready for Resume Analysis</p>
                 <p className="text-slate-300 text-sm mt-1">Upload a file to see your compatibility score</p>
