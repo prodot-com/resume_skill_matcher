@@ -17,9 +17,9 @@ export default function ResumeMatcherPage() {
     const selected = e.target.files?.[0];
     if (!selected) return;
 
-    if (selected.size > 4 * 1024 * 1024) {
+    if (selected.size > 3 * 1024 * 1024) {
       toast.error("File too large", {
-        description: "Max size is 4MB (Vercel limit)"
+        description: "Max size is 4MB"
       });
       return;
     }
@@ -116,7 +116,7 @@ export default function ResumeMatcherPage() {
           </div>
           <div className="flex items-center gap-2 md:gap-4">
             <a
-              href="https://github.com/prodot-com"
+              href="https://github.com/prodot-com/resume_skill_matcher"
               target="_blank"
               className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-600 dark:text-slate-400"
               title="GitHub Repository"
