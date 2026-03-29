@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Upload, FileText, CheckCircle, AlertCircle, Loader2, X, Trophy, Sparkles, Angry, Sun, Moon } from 'lucide-react';
+import { Upload, FileText, CheckCircle, AlertCircle, Loader2, X, Trophy, Sparkles, Angry} from 'lucide-react';
+import {toast} from "sonner";
 
 const DEFAULT_REQUIRED = ['React', 'TypeScript', 'Node.js', 'Python', 'SQL'];
 
@@ -12,14 +13,13 @@ export default function ResumeMatcherPage() {
   const [error, setError] = useState<string | null>(null);
   const [requiredSkills, setRequiredSkills] = useState<string[]>(DEFAULT_REQUIRED);
   const [newSkill, setNewSkill] = useState("");
-  const [isDark, setIsDark] = useState(false);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     if (!selected) return;
 
-    if (selected.type !== "application/pdf" && selected.type !== "text/plain") {
-      setError("Only PDF and TXT files are supported.");
+    if (selected.type !== "application/pdf") {
+      setError("Only PDF are supported.");
       return;
     }
 
@@ -37,6 +37,7 @@ export default function ResumeMatcherPage() {
       });
 
       const data = await response.json();
+      toast.error("Succesfull")
 
       if (!response.ok) throw new Error(data.error || "Failed to parse resume");
       
@@ -90,13 +91,6 @@ export default function ResumeMatcherPage() {
             >
               <Angry size={20} />
             </a>
-            <button 
-              onClick={() => setIsDark(!isDark)}
-              className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-600 dark:text-slate-400"
-              title="Toggle Theme"
-            >
-              {isDark ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
           </div>
         </div>
       </nav>
@@ -113,7 +107,7 @@ export default function ResumeMatcherPage() {
                 Upload Resume
               </h2>
               <label className="group relative block cursor-pointer">
-                <input type="file" className="hidden" onChange={handleFileChange} accept=".pdf,.txt" />
+                <input type="file" className="hidden" onChange={handleFileChange} accept=".pdf" />
                 <div className="border-2 border-dashed border-slate-200 group-hover:border-blue-400 group-hover:bg-blue-50/50 rounded-2xl p-8 text-center transition-all duration-300">
                   <div className="bg-slate-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-100 transition-colors">
                     <FileText className="text-slate-400 group-hover:text-blue-600" size={32} />
@@ -126,7 +120,7 @@ export default function ResumeMatcherPage() {
                       {(file.size / 1024).toFixed(2)} KB
                     </p>
                   )}
-                  <p className="text-xs text-slate-400 mt-2">Supports PDF & Plain Text</p>
+                  <p className="text-xs text-slate-400 mt-2">Supports PDF</p>
                 </div>
               </label>
               {error && (
@@ -137,7 +131,6 @@ export default function ResumeMatcherPage() {
               )}
             </div>
 
-            {/* Target Skills Section */}
             <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-200">
               <h2 className="text-lg font-bold mb-4 text-slate-800">Target Requirements</h2>
               <div className="flex gap-2 mb-6">
@@ -163,7 +156,6 @@ export default function ResumeMatcherPage() {
             </div>
           </div>
 
-          {/* 3. Right Column: Analysis Output */}
           <div className="lg:col-span-8">
             {loading ? (
               <div className="h-[500px] flex flex-col items-center justify-center bg-white rounded-[2rem] border border-slate-200 shadow-sm space-y-6">
@@ -179,7 +171,6 @@ export default function ResumeMatcherPage() {
             ) : extractedSkills.length > 0 ? (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-700">
                 
-                {/* Score Section */}
                 <div className="bg-white p-10 rounded-[2.5rem] shadow-sm border border-slate-200 relative overflow-hidden">
                   <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
                     <Trophy size={200} />
@@ -212,7 +203,7 @@ export default function ResumeMatcherPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Skill Pill Cloud */}
+                  
                   <div className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-200">
                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Extracted Expertise</h4>
                     <div className="flex flex-wrap gap-2">
@@ -224,7 +215,6 @@ export default function ResumeMatcherPage() {
                     </div>
                   </div>
 
-                  {/* Matching Checklist */}
                   <div className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-200">
                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Requirement Match</h4>
                     <div className="space-y-3">
