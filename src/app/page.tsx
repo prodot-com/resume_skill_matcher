@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Upload, FileText, CheckCircle, Loader2, X, Trophy, Sparkles, Angry, Heart, Globe, Smile } from 'lucide-react';
+import { Upload, FileText, CheckCircle, Loader2, X, Trophy, Sparkles, Angry, Heart, Globe, Smile, Loader } from 'lucide-react';
 import { toast } from "sonner";
 
 const DEFAULT_REQUIRED = ['React', 'TypeScript', 'Node.js', 'Python', 'SQL'];
@@ -105,7 +105,7 @@ export default function ResumeMatcherPage() {
   return (
     <div className="relative min-h-screen bg-[#f8fafc] text-slate-900 font-mono">
 
-      <div className="absolute  top-60 md:-top-25 left-1/2 -translate-x-1/2 w-full h-[800px] md:w-[900px] md:h-[700px] 
+      <div className="absolute  top-60 md:-top-25 left-1/2 -translate-x-1/2 w-full h-200 md:w-225 md:h-175 
         bg-indigo-300 blur-[120px] rounded-full z-0" 
         />
 
@@ -115,11 +115,11 @@ export default function ResumeMatcherPage() {
             <div className="bg-blue-600 p-2 rounded-xl">
               <Sparkles className="text-white" size={24} />
             </div>
-            <h1 className="text-2xl font-black tracking-tighter text-slate-900">
+            <h1 className="text-xl md:text-2xl font-black tracking-tighter text-slate-900">
               SkillMatcher <span className="text-blue-600">AI</span>
             </h1>
           </div>
-          <div className="flex items-center gap-2 md:gap-4">
+          <div className="flex items-center mr-5">
             <a
               href="https://github.com/prodot-com/resume_skill_matcher"
               target="_blank"
@@ -193,13 +193,13 @@ export default function ResumeMatcherPage() {
 
           <div className="lg:col-span-8 z-20">
             {loading ? (
-              <div className="h-[500px] flex flex-col items-center justify-center bg-white rounded-[10px] border border-slate-200 shadow-sm space-y-6">
+              <div className="h-125 flex flex-col items-center justify-center bg-white rounded-[10px] border border-slate-300 shadow-sm space-y-6">
                 <div className="relative">
                   <div className="absolute inset-0 bg-blue-500 blur-2xl opacity-20 animate-pulse"></div>
-                  <Loader2 size={64} className="animate-spin text-blue-600 relative z-10" />
+                  <Loader size={64} className="animate-spin text-blue-600 relative z-10" />
                 </div>
                 <div className="text-center">
-                  <p className="text-xl font-bold text-slate-800">Analyzing Skills</p>
+                  <p className="text-xl font-bold text-slate-800">Analyzing Skills...</p>
                   <p className="text-slate-400 text-sm">This may take some minutes....</p>
                 </div>
               </div>
@@ -272,7 +272,7 @@ export default function ResumeMatcherPage() {
                 </div>
               </div>
             ) : (
-              <div className="h-[500px] flex flex-col items-center justify-center bg-white rounded-[10px] border-2 border-dashed border-slate-200 group hover:border-blue-300 transition-colors">
+              <div className="h-125 flex flex-col items-center justify-center bg-white rounded-[10px] border-2 border-dashed border-slate-200 group hover:border-blue-300 transition-colors">
                 <div className="bg-slate-50 p-6 rounded-3xl mb-4 group-hover:scale-110 transition-transform duration-500">
                   <FileText size={64} className="text-slate-200 group-hover:text-blue-200" />
                 </div>
@@ -288,22 +288,22 @@ export default function ResumeMatcherPage() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex flex-col items-center md:items-start gap-2">
             <div className="flex items-center gap-2">
-              <Sparkles className="text-blue-600" size={20} />
-              <span className="font-black tracking-tight text-slate-900">SkillMatcher AI</span>
+              <Sparkles className="text-blue-600" size={30} />
+              <span className="text-2xl font-black tracking-tight text-slate-900">SkillMatcher AI</span>
             </div>
-            <p className="text-sm text-slate-500 font-medium">Empowering your career with AI-driven insights.</p>
+            {/* <p className="text-sm text-slate-500 font-medium">Empowering your career with AI-driven insights.</p> */}
           </div>
 
           <div className="flex flex-col items-center gap-4">
             <div className="flex items-center gap-6">
-              <a href="https://github.com/prodot-com" className="text-slate-400 hover:text-blue-600 transition-colors p-1 rounded-full hover:bg-black/15">
+              <a href="https://github.com/prodot-com" className="text-slate-400 hover:text-blue-600 transition-colors p-2 rounded-full hover:bg-black/15">
                 <img
                   src="/github.svg"
                   alt="GitHub"
                   className="w-5 h-5"
                 />
               </a>
-              <a href="https://www.linkedin.com/in/ghoshprobal/" className="text-slate-400 hover:text-blue-600 transition-colors p-1 rounded-full hover:bg-black/15">
+              <a href="https://www.linkedin.com/in/ghoshprobal/" className="text-slate-400 hover:text-blue-600 transition-colors p-2 rounded-full hover:bg-black/15">
                 <img
                   src="/linkedin.svg"
                   alt="GitHub"
@@ -317,7 +317,7 @@ export default function ResumeMatcherPage() {
           </div>
 
           <div className="text-center md:text-right">
-            <p className="text-sm text-slate-500 font-medium">© {new Date().getFullYear()} SkillMatcher. All rights reserved.</p>
+            <p className="text-sm text-slate-500 font-medium">©{new Date().getFullYear()} SkillMatcher AI. All rights reserved.</p>
           </div>
         </div>
       </footer>
