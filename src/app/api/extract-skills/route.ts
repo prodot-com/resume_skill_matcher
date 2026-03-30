@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
       const data = await pdf(buffer);
       resumeText = data.text;
     } else {
-      resumeText = await file.text();
+resumeText = await file.text();
     }
 
     if (!resumeText || resumeText.trim().length < 10) {
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
       const skills = JSON.parse(responseText);
       return NextResponse.json({ skills });
     } catch (parseError) {
-      console.error("JSON Parse Error:", responseText);
+console.error("JSON Parse Error:", responseText);
       return NextResponse.json({ error: "AI returned invalid format" }, { status: 500 });
     }
 

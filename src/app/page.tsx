@@ -148,13 +148,19 @@ export default function ResumeMatcherPage() {
                 Upload Resume
               </h2>
               <label className="group relative block cursor-pointer">
-                <input type="file" className="hidden" onChange={handleFileChange} accept=".pdf" />
+                <input 
+                type="file" className="hidden" 
+                onChange={handleFileChange} 
+                accept=".pdf" 
+                />
+
+                
                 <div className="border-2 border-dashed border-slate-200 group-hover:border-blue-400 group-hover:bg-blue-50/50 rounded-2xl p-8 text-center transition-all duration-300">
                   <div className="bg-slate-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-100 transition-colors">
                     <FileText className="text-slate-400 group-hover:text-blue-600" size={32} />
                   </div>
                   <p className="text-sm font-bold text-slate-700">
-                    {file ? file.name : "Drop resume here"}
+                    {file ? file.name : "Add resume here"}
                   </p>
                   {file && (
                     <p className="text-xs text-blue-500 font-semibold mt-1">
